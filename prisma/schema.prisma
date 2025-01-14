@@ -45,6 +45,6 @@ model Product {
 
   description   String
   imageUrl      String
-  rating        Float
-  numRatings    Int
+  rating        Float @default(0)
+  numRatings    Int @default(0)
 }
