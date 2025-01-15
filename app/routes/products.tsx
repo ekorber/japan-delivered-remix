@@ -1,28 +1,40 @@
-import { useNavigate } from "@remix-run/react";
+import { LoaderFunction } from "@remix-run/node";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import GridList from "~/components/grid-list";
 import ProductCard from "~/components/product-card";
+import { prisma } from "~/db.server";
+
+// Define the type of data being returned from the loader
+interface Product {
+    id: string;
+    name: string;
+    price: number;
+    stock: number;
+    description: string;
+    imageUrl: string;
+    rating: number;
+    numRatings: number;
+}
+
+export const loader: LoaderFunction = async () => {
+    const products = await prisma.product.findMany();
+    return { products };
+};
 
 export default function Products() {
     const navigate = useNavigate();
+    const { products } = useLoaderData<{ products: Product[] }>();
 
-    const testProduct = {
-        id: 3,
-        name: "Pokemon Cards",
-        price: 9.99,
-        imgUrl: "https://m.media-amazon.com/images/I/61MVcnn+3oL._AC_UL320_.jpg"
-    }
-
-    const openProductPage = (id: number) => {
+    const openProductPage = (id: string) => {
         navigate('/product/' + id);
     }
 
     return (
         <div>
             <GridList>
-                <ProductCard productName={testProduct.name} price={testProduct.price} imageUrl={testProduct.imgUrl} handleClick={() => openProductPage(testProduct.id)} />
-                <ProductCard productName={testProduct.name} price={testProduct.price} imageUrl={testProduct.imgUrl} handleClick={() => openProductPage(testProduct.id)} />
-                <ProductCard productName={testProduct.name} price={testProduct.price} imageUrl={testProduct.imgUrl} handleClick={() => openProductPage(testProduct.id)} />
-                <ProductCard productName={testProduct.name} price={testProduct.price} imageUrl={testProduct.imgUrl} handleClick={() => openProductPage(testProduct.id)} />
+                {products.map(product => {
+                    return <ProductCard productName={product.name} price={product.price} imageUrl={product.imageUrl} handleClick={() => openProductPage(product.id)} />
+                })}
             </GridList>        
         </div>
     );
