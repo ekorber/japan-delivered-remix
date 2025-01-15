@@ -1,7 +1,10 @@
+import { Link } from "@remix-run/react";
+
 export default function Header() {
     return (
         <div>
-            <p>Header</p>
+            <Link to={"/"}>Japan Delivered</Link>
+            <Link to={"/cart"}>Cart</Link>
         </div>
     );
 }
