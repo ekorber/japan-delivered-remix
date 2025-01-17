@@ -6,13 +6,14 @@ interface CartItemProps {
     description: string;
     imageUrl: string;
     updateQuantity: (id: string, quantity: number) => void
-    removeFromCart: (id: string) => void
+    removeFromCart: () => void
 }
 
 export default function CartListItem({ id, quantity, name, price, description, imageUrl, updateQuantity, removeFromCart } : CartItemProps) {
     return (
         <div>
             <p>{name} : {quantity}</p>
+            <button onClick={() => removeFromCart()}>Remove From Cart</button>
         </div>
     );
 }

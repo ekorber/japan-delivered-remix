@@ -5,7 +5,6 @@ import { prisma } from "~/db.server";
 
 interface ProductData {
     id: string
-    quantity: number
     name: string;
     price: number;
     description: string;
@@ -57,11 +56,16 @@ export default function Cart() {
     if (cartItems && cartItems.length > 0 && loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
 
+    const removeCartItem = (id: string) => {
+        setProducts((prevItems) => prevItems.filter((item) => item.id !== id));
+        removeFromCart(id);
+    }
+
     return (
         <div>
             <h1>Cart</h1>
             {products.length > 0 ? products.map((p, i) => {
-                return <CartListItem key={p.id} id={p.id} quantity={cartItems[i].quantity} name={p.name} price={p.price} description={p.description} imageUrl={p.imageUrl} updateQuantity={updateQuantity} removeFromCart={removeFromCart} />
+                return <CartListItem key={p.id} id={p.id} quantity={cartItems[i].quantity} name={p.name} price={p.price} description={p.description} imageUrl={p.imageUrl} updateQuantity={updateQuantity} removeFromCart={() => removeCartItem(p.id)} />
             }) : <p>Your cart is currently empty. Feel free to browse around!</p>}
         </div>
     );
