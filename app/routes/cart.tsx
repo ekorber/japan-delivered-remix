@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import CartListItem from "~/components/cart-item";
 import { useCartContext } from "~/contexts/CartContext";
-import { prisma } from "~/db.server";
 
 interface ProductData {
     id: string
@@ -9,10 +8,6 @@ interface ProductData {
     price: number;
     description: string;
     imageUrl: string;
-}
-
-export async function getCartProducts(ids: string[]) {
-    return prisma.product.findMany({ where : { id : { in: ids}}});
 }
 
 export default function Cart() {
