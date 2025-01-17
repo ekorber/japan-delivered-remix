@@ -1,6 +1,6 @@
 import { LoaderFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
-import { useCartContext } from "~/context/CartContext";
+import { useCartContext } from "~/contexts/CartContext";
 import { prisma } from "~/db.server";
 
 // Define the type of data being returned from the loader

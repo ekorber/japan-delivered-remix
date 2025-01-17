@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import CartListItem from "~/components/cart-item";
-import { useCartContext } from "~/context/CartContext";
+import { useCartContext } from "~/contexts/CartContext";
 import { prisma } from "~/db.server";
 
 interface ProductData {

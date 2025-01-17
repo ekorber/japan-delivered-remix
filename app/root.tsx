@@ -13,7 +13,7 @@ import {
 import { getUser } from "~/session.server";
 import stylesheet from "~/tailwind.css";
 import Header from "./components/header";
-import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "./contexts/CartContext";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
