@@ -1,5 +1,6 @@
-import { LoaderFunction, redirect } from "@remix-run/node";
+import { LoaderFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
+import { useCartContext } from "~/context/CartContext";
 import { prisma } from "~/db.server";
 
 // Define the type of data being returned from the loader
@@ -27,6 +28,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function Product() {
     const { product } = useLoaderData<{ product: Product }>();
+    const { addToCart } = useCartContext();
 
     return (
         <div>
@@ -35,6 +37,7 @@ export default function Product() {
             <p>${product.price.toFixed(2)}</p>
             <p>Stock: {product.stock}</p>
             <p>{product.description}</p>
+            <button onClick={() => addToCart(product.id, 1)}>Add to Cart</button>
         </div>
     );
 }
