@@ -16,7 +16,7 @@ export default function CartListItem({ id, quantity, name, price, description, i
         updateQuantity(id, value);
     };
 
-    const maxDescriptionLength = 20;
+    const maxDescriptionLength = 50;
 
     return (
         <div>
