@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 
 interface CartItem {
@@ -19,8 +19,19 @@ interface ChildProps {
 
 const CartContext = createContext<Cart | undefined>(undefined);
 
+const CART_LOCAL_STORAGE_KEY = 'cart'
+
 export function CartProvider({children} : ChildProps) {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+    useEffect(() => {
+        console.log('setting storage')
+        // Set the cart to the stored value just once, upon starting the app
+        const storage = localStorage.getItem(CART_LOCAL_STORAGE_KEY)
+        if (storage) {
+            setCartItems(JSON.parse(storage))
+        }
+    }, [])
 
     const addToCart = (id: string, quantity: number) => {
         let alreadyInCart = false;
@@ -36,21 +47,28 @@ export function CartProvider({children} : ChildProps) {
         if (alreadyInCart)
             return;
 
+        const newCartItems = [...cartItems, {id, quantity}]
         // Only when adding new items to the cart
-        setCartItems((prevItems) => [...prevItems, {id, quantity}]);
+        setCartItems(newCartItems);
+        localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(newCartItems));
     }
 
     const removeFromCart = (id: string) => {
-        setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+        const newCartItems = cartItems.filter((item) => item.id !== id)
+        setCartItems(newCartItems);
+        localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(newCartItems));
     }
 
     const updateQuantity = (id: string, quantity: number) => {
-        setCartItems(cartItems.map(item => {
+        const newCartItems = cartItems.map(item => {
             if (item.id === id) {
                 item.quantity = quantity;
             }
             return item;
-        }));
+        })
+
+        setCartItems(newCartItems);
+        localStorage.setItem(CART_LOCAL_STORAGE_KEY, JSON.stringify(newCartItems));
     }
 
     return (
