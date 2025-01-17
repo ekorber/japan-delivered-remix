@@ -48,20 +48,48 @@ export default function Cart() {
         fetchProducts();
     }, [])
 
-    if (cartItems && cartItems.length > 0 && loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-
     const removeCartItem = (id: string) => {
         setProducts((prevItems) => prevItems.filter((item) => item.id !== id));
         removeFromCart(id);
     }
 
+    const calculateSubTotal = () => {
+        let subTotal = 0;
+        cartItems.forEach(item => {
+            let pricePerUnit = 0;
+            
+            for (let i = 0; i < products.length; i++) {
+                if (products[i].id === item.id) {
+                    pricePerUnit = products[i].price
+                    break
+                }
+            }
+            
+            subTotal += (item.quantity * pricePerUnit)
+        });
+
+        return subTotal.toFixed(2);
+    }
+
+    if (cartItems && cartItems.length > 0 && loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error}</div>;
+
+    if (cartItems.length === 0)
+        return (
+            <>
+                <h1>Cart</h1>
+                <p>Your cart is currently empty. Feel free to browse around!</p>
+            </>
+        )
+
     return (
-        <div>
+        <>
             <h1>Cart</h1>
-            {products.length > 0 ? products.map((p, i) => {
+            {products.map((p, i) => {
                 return <CartListItem key={p.id} id={p.id} quantity={cartItems[i].quantity} name={p.name} price={p.price} description={p.description} imageUrl={p.imageUrl} updateQuantity={updateQuantity} removeFromCart={() => removeCartItem(p.id)} />
-            }) : <p>Your cart is currently empty. Feel free to browse around!</p>}
-        </div>
+            })}
+
+            <p>Subtotal: ${calculateSubTotal()}</p>
+        </>
     );
 }
