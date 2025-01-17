@@ -19,18 +19,13 @@ export default function CartListItem({ id, quantity, name, price, description, i
     return (
         <div>
             <p>{name} - ${(price * quantity).toFixed(2)}</p>
-            <div>
-                <select className="numberDropdown" value={quantity} onChange={handleChange}>
-                    <option value="" disabled>
-                    -- Select a number --
+            <select className="numberDropdown" value={quantity} onChange={handleChange}>
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                    <option key={num} value={num}>
+                        {num}
                     </option>
-                    {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
-                        <option key={num} value={num}>
-                            {num}
-                        </option>
-                    ))}
-                </select>
-            </div>
+                ))}
+            </select>
             <button onClick={() => removeFromCart()}>Remove From Cart</button>
         </div>
     );
