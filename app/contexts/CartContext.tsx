@@ -25,7 +25,6 @@ export function CartProvider({children} : ChildProps) {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
     useEffect(() => {
-        console.log('setting storage')
         // Set the cart to the stored value just once, upon starting the app
         const storage = localStorage.getItem(CART_LOCAL_STORAGE_KEY)
         if (storage) {
