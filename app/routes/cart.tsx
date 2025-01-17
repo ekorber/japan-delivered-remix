@@ -24,7 +24,7 @@ export default function Cart() {
 
     // Load product data on page load
     useEffect(() => {
-        
+
         if (!cartItems || cartItems.length === 0)
             return
         
@@ -35,7 +35,7 @@ export default function Cart() {
                 cartItems.map(item => ids = ids + item.id + ',')
                 ids = ids.slice(0, -1); // Remove the last unnecessary comma
 
-                const response = await fetch('/get-products?ids=' + ids);
+                const response = await fetch('/api/get-products?ids=' + ids);
                 if (!response.ok) {
                     throw new Error('Failed to fetch products');
                 }
