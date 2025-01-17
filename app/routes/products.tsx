@@ -33,7 +33,7 @@ export default function Products() {
         <div>
             <GridList>
                 {products.map(product => {
-                    return <ProductCard productName={product.name} price={product.price} imageUrl={product.imageUrl} handleClick={() => openProductPage(product.id)} />
+                    return <ProductCard key={product.id} productName={product.name} price={product.price} imageUrl={product.imageUrl} handleClick={() => openProductPage(product.id)} />
                 })}
             </GridList>        
         </div>
