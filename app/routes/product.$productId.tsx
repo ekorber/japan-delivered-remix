@@ -1,5 +1,6 @@
 import { LoaderFunction } from "@remix-run/node";
 import { json, useLoaderData } from "@remix-run/react";
+import { useState } from "react";
 import { useCartContext } from "~/contexts/CartContext";
 import { prisma } from "~/db.server";
 
@@ -30,6 +31,8 @@ export default function Product() {
     const { product } = useLoaderData<{ product: Product }>();
     const { addToCart } = useCartContext();
 
+    const [quantity, setQuantity] = useState(1);
+
     return (
         <div>
             <img src={product.imageUrl} alt={product.name} />
@@ -37,7 +40,14 @@ export default function Product() {
             <p>${product.price.toFixed(2)}</p>
             <p>Stock: {product.stock}</p>
             <p>{product.description}</p>
-            <button onClick={() => addToCart(product.id, 1)}>Add to Cart</button>
+            <select className="numberDropdown" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value, 10))}>
+                {Array.from({ length: 10 }, (_, i) => i + 1).map((num) => (
+                    <option key={num} value={num}>
+                        {num}
+                    </option>
+                ))}
+            </select>
+            <button onClick={() => addToCart(product.id, quantity)}>Add to Cart</button>
         </div>
     );
 }
