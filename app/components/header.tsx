@@ -1,8 +1,25 @@
-import { Link } from "@remix-run/react";
+import { useEffect, useState } from "react";
 import { useCartContext } from "~/contexts/CartContext";
+import HeaderDesktop from "./header-desktop";
+import HeaderMobile from "./header-mobile";
 
 export default function Header() {
+    const [isMobileScreen, setIsMobileScreen] = useState<boolean>(false)
     const { cartItems } = useCartContext();
+
+    useEffect(() => {
+        const onScreenSizeChanged = () => {
+            setIsMobileScreen(window.innerWidth <= 768)
+        }
+
+        // Run the function when the component mounts at start
+        onScreenSizeChanged()
+
+        window.addEventListener('resize', onScreenSizeChanged)
+
+        // Remove event listener as cleanup when unmounting
+        return () => window.removeEventListener('resize', onScreenSizeChanged)
+    }, [])
 
     const calculateTotalItems = () => {
         let total = 0;
@@ -16,13 +33,6 @@ export default function Header() {
     const totalItems = calculateTotalItems();
 
     return (
-        <div>
-            <Link to={"/"}>Japan Delivered</Link>
-            <p> </p>
-            <Link to={"/products"}>Products</Link>
-            <p> </p>
-            <Link to={"/cart"}>Cart {totalItems > 0 && totalItems}</Link>
-            <p> </p>
-        </div>
+        isMobileScreen ? <HeaderMobile totalCartItems={totalItems} /> : <HeaderDesktop totalCartItems={totalItems} />
     );
 }
