@@ -1,3 +1,4 @@
+import { Link } from "@remix-run/react";
 import { useEffect, useState } from "react";
 import CartListItem from "~/components/cart-item";
 import { useCartContext } from "~/contexts/CartContext";
@@ -90,6 +91,7 @@ export default function Cart() {
             })}
 
             <p>Subtotal: ${calculateSubTotal()}</p>
+            <Link to={'/checkout'}>Checkout</Link>
         </>
     );
 }
